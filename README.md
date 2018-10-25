@@ -8,11 +8,45 @@ guide for the [Nomad](https://www.nomadproject.io) project, which adds [Consul](
 and [Vault UI](https://github.com/djenriquez/vault-ui) to form a minimal implementation of a
 ["Hashistack"](https://twitter.com/hashtag/hashistack) for local development purposes.
 
+## Prerequistite
+
+### Vagrant
+
+please make sure you are running the most recent version of Vagrant
+
+#### OSX
+
+```bash
+$ brew cask reinstall vagrant
+...
+==> Satisfying dependencies
+==> Downloading https://releases.hashicorp.com/vagrant/2.2.0/vagrant_2.2.0_x86_64.dmg
+
+
+$ vagrant plugin repair
+
+Repairing currently installed global plugins. This may take a few minutes...
+Fetching: vagrant-alpine-0.3.0.gem (100%)
+Fetching: vagrant-cachier-1.2.1.gem (100%)
+Fetching: vagrant-host-shell-0.0.4.gem (100%)
+Fetching: micromachine-2.0.0.gem (100%)
+Fetching: vagrant-vbguest-0.16.0.gem (100%)
+Installed plugins successfully repaired!
+```
+
+
+### Landrush
+[Landrush](https://github.com/vagrant-landrush/landrush) is a simple cross-platform DNS for Vagrant
+
+```
+vagrant plugin install landrush
+```
+
 ## Quickstart
 
 ```bash
 $ git clone https://github.com/donovanmuller/hashistack-vagrant.git
-$ vagrant plugin install landrush
+
 $ vagrant up
 $ vagrant ssh
 
