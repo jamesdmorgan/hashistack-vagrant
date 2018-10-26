@@ -216,6 +216,28 @@ $ ping -c 1 nomad-client
 Docker is installed so you can use the [`docker` task driver](https://www.nomadproject.io/docs/drivers/docker.html)
 to schedule tasks.
 
+To use private docker containers you will need to save the image to the `/var/www/` director as a tar file. This will be
+served up by nginx and available as an artifact inside Nomad.
+
+```bash
+vagrant@hashistack:~$ docker save echo > /var/www/echo.tar
+```
+
+The following Nomad configuration will load the docker images as a tarball
+```bash
+artifact {
+    source = "http://nginx.service.consul:8080/echo.tar"
+}
+
+config {
+    image = "echo:1"
+    load = "echo.tar"
+    port_map {
+       http = 80
+    }
+}
+```
+
 ##### Service discovery
 
 The configuration to use Consul as a DNS server has already been done.
