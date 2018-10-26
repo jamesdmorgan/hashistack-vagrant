@@ -1,0 +1,15 @@
+version: '2.0'
+
+services:
+
+  # Mock services
+  echo:
+    build:
+      context: flask
+    image: echo:1
+    labels:
+      SERVICE_80_NAME: echo
+      SERVICE_TAGS: flask
+    ports:
+      - 80
+    tty: true

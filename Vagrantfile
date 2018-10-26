@@ -79,6 +79,22 @@ sudo apt-add-repository -y ppa:openjdk-r/ppa
 sudo apt-get --allow-unauthenticated update
 sudo apt-get --allow-unauthenticated install -y openjdk-8-jdk
 
+# Download docker-compose
+echo "Installing docker-compose"
+sudo apt install docker-compose -y
+
+# Build containers
+echo "Building containers"
+docker-compose build
+
+# nginx config for serving saved docker containers for nomad
+sudo mkdir -p /var/www
+sudo chmod 755 /var/www
+sudo bash -c 'echo "Vagrant Hashicorp nginx server" > /var/www/index.html'
+
+echo "Running nginx for serving docker images"
+nomad run nginx.nomad
+
 SCRIPT
 
 $post_docker_script = <<SCRIPT
@@ -92,9 +108,9 @@ echo "Restarting Docker for DNS settings..."
 sudo systemctl restart docker
 
 # Only show /etc/motd and nothing else on vagrant ssh
-sudo rm /etc/update-motd.d/00-header
-sudo rm /etc/update-motd.d/91-release-upgrade
-sudo rm /etc/update-motd.d/10-help-text
+sudo rm -f /etc/update-motd.d/00-header
+sudo rm -f /etc/update-motd.d/91-release-upgrade
+sudo rm -f /etc/update-motd.d/10-help-text
 sudo mv motd /etc/motd
 sudo sed -i -e 's/PrintLastLog yes/PrintLastLog no/g' /etc/ssh/sshd_config
 sudo systemctl restart ssh
@@ -112,17 +128,21 @@ Vagrant.configure(2) do |config|
   config.vm.provision "file", source: "vault/vault.hcl", destination: "vault.hcl"
   config.vm.provision "file", source: "vault/vault-start.sh", destination: "vault-start.sh"
   config.vm.provision "file", source: "fabio/fabio-start.sh", destination: "fabio-start.sh"
+  config.vm.provision "file", source: "nginx/nginx.nomad", destination: "nginx.nomad"
   config.vm.provision "file", source: "nomad-ui/nomad-ui.nomad", destination: "nomad-ui.nomad"
   config.vm.provision "file", source: "vault-ui/vault-ui.nomad", destination: "vault-ui.nomad"
   config.vm.provision "file", source: "full-hashistack.yml", destination: "full-hashistack.yml"
   config.vm.provision "file", source: "start.sh", destination: "start.sh"
   config.vm.provision "shell", path: "dns.sh", run: "always"
+  config.vm.provision "file", source: "docker-compose.yml", destination: "docker-compose.yml"
+  config.vm.provision "file", source: "flask", destination: "flask"
   config.vm.provision "shell", inline: $script, privileged: false, keep_color: true
   # Before we copy to /etc/fabio.d/fabio.properties, it must be created first by $script.
   config.vm.provision "file", source: "fabio/fabio.properties", destination: "/etc/fabio.d/fabio.properties"
   config.vm.provision "docker" # Just install it
   config.vm.provision "file", source: "motd", destination: "motd"
   config.vm.provision "shell", inline: $post_docker_script, privileged: false, keep_color: true
+
 
   # Resources and network settings
   $memory = "4096"

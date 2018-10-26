@@ -10,9 +10,10 @@ and [Vault UI](https://github.com/djenriquez/vault-ui) to form a minimal impleme
 
 ## Prerequistite
 
-### Vagrant
+### Vagrant + VirtualBox
 
-please make sure you are running the most recent version of Vagrant
+please make sure you are running the most recent version of Vagrant & [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+
 
 #### OSX
 
@@ -140,6 +141,8 @@ This allows the `hashistack.vagrant` domain to be used as a wildcard domain, so 
 exposed services can be resolved via DNS queries, for example `my-app.hashistack.vagrant`.
 Assuming that `my-app` has a route entry configured in Fabio.
 
+Fabui UI is available at [http://hashistack.vagrant:9998/routes](http://hashistack.vagrant:9998/routes)
+
 ### Working with the Hashistack
 
 Once the Hashistack has been provisioned, you can start the components by first opening a SSH session with:
@@ -168,9 +171,32 @@ Window 4 (`start`) will focus on start and presents you with an overview of the 
 
 For more commands available when using tmux, please see [this cheatsheet](https://gist.github.com/MohamedAlaa/2961058) .
 
+by default `ctr+b 0` will show consul, `ctr+b 4` will show the start pane
+
 ![Hashistack in tmux session](/docs/images/hashistack-vagrant.png)
 
-You can now schedule jobs using `nomad`.
+You can now schedule jobs using `nomad`. The following will initialise an example **redis** job and schedule it on nomad
+
+```bash
+vagrant@hashistack:~$ nomad status
+No running jobs
+
+vagrant@hashistack:~$
+Example job file written to example.nomad
+
+
+vagrant@hashistack:~$ nomad run example.nomad
+==> Monitoring evaluation "63931b0d"
+    Evaluation triggered by job "example"
+    Allocation "93067f0b" created: node "267e37a0", group "cache"
+    Allocation "93067f0b" status changed: "pending" -> "running"
+    Evaluation status changed: "pending" -> "complete"
+==> Evaluation "63931b0d" finished with status "complete"
+
+vagrant@hashistack:~$ nomad status
+ID       Type     Priority  Status
+example  service  50        running
+```
 
 #### Service discovery
 
