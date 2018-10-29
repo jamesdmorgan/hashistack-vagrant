@@ -216,11 +216,12 @@ $ ping -c 1 nomad-client
 Docker is installed so you can use the [`docker` task driver](https://www.nomadproject.io/docs/drivers/docker.html)
 to schedule tasks.
 
-To use private docker containers you will need to save the image to the `/var/www/` director as a tar file. This will be
+To use private docker containers you will need to save the image to the `/var/www/` as **root** director as a tar file. This will be
 served up by nginx and available as an artifact inside Nomad.
 
 ```bash
-vagrant@hashistack:~$ docker save echo > /var/www/echo.tar
+vagrant@hashistack:~$ sudo -i
+root@hashistack:~$ docker save echo > /var/www/echo.tar
 ```
 
 The following Nomad configuration will load the docker images as a tarball
