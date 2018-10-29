@@ -75,6 +75,14 @@ you can navigate to: http://vault-ui.hashistack.vagrant
 
 =========================================================
 
+Nginx
+
+To start nginx webserver to serve local docker images run the following:-
+
+'$ nomad run nginx.nomad'
+
+=========================================================
+
 To disconnect from the tmux session hit 'Cntrl + b' and 'd'.
 To reconnect execute 'tmux a'
 

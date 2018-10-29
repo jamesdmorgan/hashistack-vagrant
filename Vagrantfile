@@ -92,9 +92,6 @@ sudo mkdir -p /var/www
 sudo chmod 755 /var/www
 sudo bash -c 'echo "Vagrant Hashicorp nginx server" > /var/www/index.html'
 
-echo "Running nginx for serving docker images"
-nomad run nginx.nomad
-
 SCRIPT
 
 $post_docker_script = <<SCRIPT
