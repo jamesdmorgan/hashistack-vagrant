@@ -46,7 +46,7 @@ vagrant plugin install landrush
 ## Quickstart
 
 ```bash
-$ git clone https://github.com/donovanmuller/hashistack-vagrant.git
+$ git clone https://github.com/jamesdmorgan/hashistack-vagrant.git
 
 $ vagrant up
 $ vagrant ssh
